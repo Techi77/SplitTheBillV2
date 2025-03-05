@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.splitthebill"
+    namespace = "com.stb.splitthebill"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.splitthebill"
+        applicationId = "com.stb.splitthebill"
         minSdk = 24
         targetSdk = 35
         versionCode = 1

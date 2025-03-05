@@ -21,3 +21,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "Split the bill"
 include(":app")
+include(":ui")
+include(":ui:registration")
+include(":mylibrary")
+include(":buildLogic")
