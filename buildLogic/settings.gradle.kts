@@ -1,5 +1,4 @@
 pluginManagement {
-    includeBuild("buildLogic")
     repositories {
         google {
             content {
@@ -12,16 +11,19 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
     }
+    versionCatalogs {
+        create("libs") {
+            from(files("../gradle/libs.versions.toml"))
+        }
+    }
 }
 
-rootProject.name = "stb"
-include(":app")
-include(":ui")
-include(":ui:registration")
-include(":mylibrary")
+rootProject.name = "buildLogic"
+include(":config")
