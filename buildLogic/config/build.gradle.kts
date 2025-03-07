@@ -17,11 +17,22 @@ tasks.withType<KotlinCompile>().configureEach {
     }
 }
 
+dependencies{
+    compileOnly(libs.gradle)
+    compileOnly(libs.kotlin.gradle.plugin)
+}
+
 gradlePlugin {
     plugins {
         register("emptyPlugin") {
             id = "stb.emptyPlugin"
             implementationClass = "plugins.EmptyPlugin"
+        }
+    }
+    plugins {
+        register("appPlugin") {
+            id = "stb.appPlugin"
+            implementationClass = "plugins.AppPlugin"
         }
     }
 }
