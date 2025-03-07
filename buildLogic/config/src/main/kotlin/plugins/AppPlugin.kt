@@ -24,7 +24,6 @@ class AppPlugin : Plugin<Project> {
 
             val libs = libs()
             dependencies {
-                add("implementation", libs.navigationCompose())
                 add("implementation", libs.coreKtx())
                 add("implementation", libs.lifecycleRuntimeKtx())
 
