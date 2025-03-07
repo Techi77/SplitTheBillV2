@@ -2,11 +2,11 @@ package plugins
 
 import GradleConstants
 import com.android.build.api.dsl.ApplicationExtension
-import extentions.addCompose
-import extentions.configureAndroidModule
+import extentions.*
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.dependencies
 
 class AppPlugin : Plugin<Project> {
     override fun apply(project: Project) {
@@ -21,6 +21,26 @@ class AppPlugin : Plugin<Project> {
             }
 
             configureAndroidModule()
+
+            val libs = libs()
+            dependencies {
+                add("implementation", libs.activityCompose())
+                add("implementation", libs.navigationCompose())
+                add("implementation", libs.ui())
+                add("implementation", libs.uiGraphics())
+                add("implementation", libs.uiToolingPreview())
+                add("implementation", libs.coreKtx())
+                add("implementation", libs.lifecycleRuntimeKtx())
+                add("implementation", libs.material3())
+
+                add("androidTestImplementation", libs.uiTestJunit4())
+                add("debugImplementation", libs.uiTestManifest())
+                add("debugImplementation", libs.uiTooling())
+                add("testImplementation", libs.junit())
+                add("androidTestImplementation", libs.androidxJunit())
+                add("androidTestImplementation", libs.espressoCore())
+                add("androidTestImplementation", platform(libs.composeBom()))
+            }
         }
     }
 }
