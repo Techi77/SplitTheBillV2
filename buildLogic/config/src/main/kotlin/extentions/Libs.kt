@@ -22,6 +22,7 @@ internal fun VersionCatalog.coreKtx() = findLibrary("androidx-core-ktx").get()
 internal fun VersionCatalog.lifecycleRuntimeKtx() = findLibrary("androidx-lifecycle-runtime-ktx").get()
 
 internal fun VersionCatalog.material3() = findLibrary("androidx-material3").get()
+internal fun VersionCatalog.material() = findLibrary("material").get()
 
 // Test
 internal fun VersionCatalog.uiTestJunit4() = findLibrary("androidx-ui-test-junit4").get()

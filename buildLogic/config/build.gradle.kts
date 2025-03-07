@@ -35,4 +35,10 @@ gradlePlugin {
             implementationClass = "plugins.AppPlugin"
         }
     }
+    plugins {
+        register("uiPlugin") {
+            id = "stb.uiPlugin"
+            implementationClass = "plugins.UiPlugin"
+        }
+    }
 }
