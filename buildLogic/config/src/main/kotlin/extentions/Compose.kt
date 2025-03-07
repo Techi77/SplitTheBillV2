@@ -20,6 +20,11 @@ internal fun Project.addCompose(
             add("implementation", platform(bom))
             add("androidTestImplementation", platform(bom))
             add("implementation", libs.composeRuntime())
+            add("implementation", libs.activityCompose())
+            add("implementation", libs.ui())
+            add("implementation", libs.uiGraphics())
+            add("implementation", libs.uiToolingPreview())
+            add("implementation", libs.material3())
         }
     }
 }

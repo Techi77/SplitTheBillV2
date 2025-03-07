@@ -24,14 +24,9 @@ class AppPlugin : Plugin<Project> {
 
             val libs = libs()
             dependencies {
-                add("implementation", libs.activityCompose())
                 add("implementation", libs.navigationCompose())
-                add("implementation", libs.ui())
-                add("implementation", libs.uiGraphics())
-                add("implementation", libs.uiToolingPreview())
                 add("implementation", libs.coreKtx())
                 add("implementation", libs.lifecycleRuntimeKtx())
-                add("implementation", libs.material3())
 
                 add("androidTestImplementation", libs.uiTestJunit4())
                 add("debugImplementation", libs.uiTestManifest())
