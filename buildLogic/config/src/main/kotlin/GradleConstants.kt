@@ -10,6 +10,7 @@ object GradleConstants {
         const val KOTLIN_ANDROID = "org.jetbrains.kotlin.android"
         const val KOTLIN_COMPOSE = "org.jetbrains.kotlin.plugin.compose"
         const val ANDROID_J_UNIT_RUNNER = "androidx.test.runner.AndroidJUnitRunner"
+        const val DYNAMIC_FEATURE = "com.android.dynamic-feature"
     }
 
     object Version {

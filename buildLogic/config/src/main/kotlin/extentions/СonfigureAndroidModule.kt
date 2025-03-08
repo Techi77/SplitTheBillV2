@@ -11,7 +11,6 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 internal fun Project.configureAndroidModule() = extensions.configure<AppExtension> {
     compileSdkVersion(GradleConstants.SDK.COMPILE_SDK)
     defaultConfig {
-        applicationId = GradleConstants.APP_ID
         minSdk = GradleConstants.SDK.MIN_SDK
         targetSdk = GradleConstants.SDK.TARGET_SDK
         versionCode = GradleConstants.Version.CODE

@@ -4,9 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.runtime.Composable
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
 import com.stb.splitthebill.ui.theme.SplitTheBillTheme
 
 class MainActivity : ComponentActivity() {
@@ -18,14 +15,5 @@ class MainActivity : ComponentActivity() {
                 MyApp()
             }
         }
-    }
-}
-
-@Composable
-fun MyApp() {
-    val navController = rememberNavController()
-    NavHost(navController, startDestination = "home") {
-        //composable("home") { HomeScreen(navController) }
-        //composable("details") { DetailsScreen(navController) }
     }
 }

@@ -17,6 +17,9 @@ class AppPlugin : Plugin<Project> {
             }
 
             extensions.configure<ApplicationExtension> {
+                defaultConfig {
+                    applicationId = GradleConstants.APP_ID
+                }
                 addCompose(this)
             }
 
