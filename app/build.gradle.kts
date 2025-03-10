@@ -4,5 +4,7 @@ plugins {
 
 android {
     namespace = "com.stb.splitthebill" /*это всегда остаётся*/
-    dynamicFeatures += setOf(":ui:registration")
+}
+dependencies {
+    implementation(project(":ui:registration"))
 }

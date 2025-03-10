@@ -1,6 +1,6 @@
 package plugins
 
-import com.android.build.api.dsl.DynamicFeatureExtension
+import com.android.build.api.dsl.LibraryExtension
 import extentions.addCompose
 import extentions.configureAndroidModule
 import extentions.coreKtx
@@ -15,21 +15,19 @@ class UiPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         with(project) {
             with(plugins) {
-                apply(GradleConstants.Libs.DYNAMIC_FEATURE)
+                apply(GradleConstants.Libs.ANDROID_LIBRARY)
                 apply(GradleConstants.Libs.KOTLIN_ANDROID)
             }
 
-            extensions.configure<DynamicFeatureExtension> {
+            extensions.configure<LibraryExtension> {
                 addCompose(this)
+                configureAndroidModule(this, project)
             }
-
-            configureAndroidModule()
 
             val libs = libs()
             dependencies {
                 add("implementation", libs.coreKtx())
                 add("implementation", libs.material())
-                add("implementation", project(":app"))
             }
         }
     }

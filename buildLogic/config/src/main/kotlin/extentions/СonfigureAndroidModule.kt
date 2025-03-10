@@ -1,29 +1,27 @@
 package extentions
 
-import com.android.build.gradle.AppExtension
+import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Action
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
-import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
-internal fun Project.configureAndroidModule() = extensions.configure<AppExtension> {
-    compileSdkVersion(GradleConstants.SDK.COMPILE_SDK)
-    defaultConfig {
+internal fun configureAndroidModule(
+    commonExtension: CommonExtension<*, *, *, *, *>,
+    project: Project
+) {
+    commonExtension.compileSdk = GradleConstants.SDK.COMPILE_SDK
+    commonExtension.defaultConfig {
         minSdk = GradleConstants.SDK.MIN_SDK
-        targetSdk = GradleConstants.SDK.TARGET_SDK
-        versionCode = GradleConstants.Version.CODE
-        versionName = GradleConstants.Version.NAME
-
         testInstrumentationRunner = GradleConstants.Libs.ANDROID_J_UNIT_RUNNER
     }
-    compileOptions {
+    commonExtension.compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlin {
+    project.kotlin {
         jvmToolchain(17)
     }
 }

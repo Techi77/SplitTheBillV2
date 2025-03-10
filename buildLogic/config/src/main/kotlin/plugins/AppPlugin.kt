@@ -21,9 +21,13 @@ class AppPlugin : Plugin<Project> {
                     applicationId = GradleConstants.APP_ID
                 }
                 addCompose(this)
+                configureAndroidModule(this, project)
+                defaultConfig {
+                    targetSdk = GradleConstants.SDK.TARGET_SDK
+                    versionCode = GradleConstants.Version.CODE
+                    versionName = GradleConstants.Version.NAME
+                }
             }
-
-            configureAndroidModule()
 
             val libs = libs()
             dependencies {

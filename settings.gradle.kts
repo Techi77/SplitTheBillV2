@@ -22,6 +22,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "stb"
 include(":app")
-include(":ui")
 include(":ui:registration")
 include(":mylibrary")
