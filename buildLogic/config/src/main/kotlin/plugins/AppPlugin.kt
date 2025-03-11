@@ -12,8 +12,9 @@ class AppPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         with(project) {
             with(plugins) {
-                apply(GradleConstants.Libs.ANDROID_APPLICATION)
-                apply(GradleConstants.Libs.KOTLIN_ANDROID)
+                apply(GradleConstants.Plugins.ANDROID_APPLICATION)
+                apply(GradleConstants.Plugins.KOTLIN_ANDROID)
+                apply(GradleConstants.Plugins.KOTLIN_SERIALIZATION)
             }
 
             extensions.configure<ApplicationExtension> {
@@ -33,6 +34,7 @@ class AppPlugin : Plugin<Project> {
             dependencies {
                 add("implementation", libs.coreKtx())
                 add("implementation", libs.lifecycleRuntimeKtx())
+                add("implementation", libs.kotlinxSerialization())
 
                 add("androidTestImplementation", libs.uiTestJunit4())
                 add("debugImplementation", libs.uiTestManifest())

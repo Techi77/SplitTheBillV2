@@ -5,10 +5,15 @@ object GradleConstants {
         const val TARGET_SDK = 35
     }
 
-    object Libs {
+    object Plugins {
         const val ANDROID_APPLICATION = "com.android.application"
-        const val ANDROID_LIBRARY = "com.android.library"
         const val KOTLIN_ANDROID = "org.jetbrains.kotlin.android"
+        const val ANDROID_LIBRARY = "com.android.library"
+        const val KOTLIN_PARCELIZE = "org.jetbrains.kotlin.plugin.parcelize"
+        const val KOTLIN_SERIALIZATION = "org.jetbrains.kotlin.plugin.serialization"
+    }
+
+    object Libs {
         const val KOTLIN_COMPOSE = "org.jetbrains.kotlin.plugin.compose"
         const val ANDROID_J_UNIT_RUNNER = "androidx.test.runner.AndroidJUnitRunner"
     }

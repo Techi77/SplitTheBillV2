@@ -7,8 +7,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.stb.ui.registration.R
@@ -27,7 +27,7 @@ fun RegistrationCard(
     Card(
         modifier = Modifier.padding(paddingValues)
     ) {
-        Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_pizza), contentDescription = "")
+        Icon(bitmap = ImageBitmap.imageResource(R.drawable.ic_pizza), contentDescription = "")
     }
 }
 

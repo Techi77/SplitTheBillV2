@@ -15,8 +15,8 @@ class UiPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         with(project) {
             with(plugins) {
-                apply(GradleConstants.Libs.ANDROID_LIBRARY)
-                apply(GradleConstants.Libs.KOTLIN_ANDROID)
+                apply(GradleConstants.Plugins.ANDROID_LIBRARY)
+                apply(GradleConstants.Plugins.KOTLIN_ANDROID)
             }
 
             extensions.configure<LibraryExtension> {

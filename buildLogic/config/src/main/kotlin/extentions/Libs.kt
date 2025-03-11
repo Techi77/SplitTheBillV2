@@ -21,6 +21,8 @@ internal fun VersionCatalog.uiToolingPreview() = findLibrary("androidx-ui-toolin
 internal fun VersionCatalog.coreKtx() = findLibrary("androidx-core-ktx").get()
 internal fun VersionCatalog.lifecycleRuntimeKtx() = findLibrary("androidx-lifecycle-runtime-ktx").get()
 
+internal fun VersionCatalog.kotlinxSerialization() = findLibrary("kotlinx-serialization-json").get()
+
 internal fun VersionCatalog.material3() = findLibrary("androidx-material3").get()
 internal fun VersionCatalog.material() = findLibrary("material").get()
 
