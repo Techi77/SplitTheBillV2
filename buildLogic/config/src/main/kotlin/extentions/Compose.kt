@@ -26,6 +26,8 @@ internal fun Project.addCompose(
             add("implementation", libs.uiToolingPreview())
             add("implementation", libs.material3())
             add("implementation", libs.navigationCompose())
+
+            add("debugImplementation", libs.uiTooling())
         }
     }
 }

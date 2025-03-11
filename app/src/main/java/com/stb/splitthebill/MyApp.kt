@@ -14,7 +14,7 @@ object Registration
 fun MyApp() {
     val navController = rememberNavController()
     NavHost(navController, startDestination = Registration) {
-        composable <Registration> { RegistrationScreen(navController) }
+        composable <Registration> { RegistrationScreen() }
         //composable("details") { DetailsScreen(navController) }
     }
 }

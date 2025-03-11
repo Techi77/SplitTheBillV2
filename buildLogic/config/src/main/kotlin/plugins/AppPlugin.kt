@@ -38,7 +38,6 @@ class AppPlugin : Plugin<Project> {
 
                 add("androidTestImplementation", libs.uiTestJunit4())
                 add("debugImplementation", libs.uiTestManifest())
-                add("debugImplementation", libs.uiTooling())
                 add("testImplementation", libs.junit())
                 add("androidTestImplementation", libs.androidxJunit())
                 add("androidTestImplementation", libs.espressoCore())
