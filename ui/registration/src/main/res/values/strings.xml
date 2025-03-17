@@ -1,3 +1,4 @@
 <resources>
     <string name="login_or_register">Войти или зарегестрироваться</string>
+    <string name="by_google">С помощью\nGoogle</string>
 </resources>

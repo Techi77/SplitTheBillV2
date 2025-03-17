@@ -7,4 +7,6 @@ android {
 }
 dependencies {
     implementation(project(":ui:registration"))
+    implementation(project(":core:theme"))
+    implementation(project(":core:theme"))
 }
