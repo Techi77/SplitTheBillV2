@@ -14,4 +14,5 @@
 * Coroutines + Flow
 * Compose (без фрагментов) + Jetpack Navigation
 * DataStore
+* Gradle+Plugins
 ![image](https://github.com/user-attachments/assets/0b17cf50-0905-490e-904d-8ac8cf20dbac)
