@@ -1,6 +1,6 @@
-package com.stb.splitthebill.appBase
+package com.stb.appbase
 
 import androidx.compose.runtime.Immutable
 
 @Immutable
-interface UiEvent
+interface UiState

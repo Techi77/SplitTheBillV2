@@ -1,8 +1,7 @@
-package com.stb.splitthebill.appBase
+package com.stb.appbase
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stb.splitthebill.StateViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

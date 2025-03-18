@@ -37,6 +37,9 @@ internal fun VersionCatalog.espressoCore() = findLibrary("androidx-espresso-core
 internal fun VersionCatalog.firebaseBom() = findLibrary("firebase-bom").get()
 internal fun VersionCatalog.firebaseAuth() = findLibrary("firebase-auth").get()
 internal fun VersionCatalog.firebaseAnalytics() = findLibrary("firebase-analytics").get()
+internal fun VersionCatalog.credentials() = findLibrary("credentials").get()
+internal fun VersionCatalog.credentialsPlayServicesAuth() = findLibrary("credentials-play-services-auth").get()
+internal fun VersionCatalog.googleId() = findLibrary("googleid").get()
 
 //google auth
 internal fun VersionCatalog.googleFirebaseAuth() = findLibrary("google-firebase-auth").get()

@@ -67,12 +67,10 @@ fun RegistrationDialog(
             body?.let {
                 it()
             }
-            if (!buttonText.isNullOrBlank())
+            if (!buttonText.isNullOrBlank() && buttonOnClick != null)
                 Card(
                     modifier = Modifier
-                        .apply {
-                            if (buttonOnClick != null) clickable { buttonOnClick() }
-                        },
+                        .clickable { buttonOnClick() },
                     colors = CardDefaults.cardColors().copy(
                         containerColor = Color.Transparent
                     ),
@@ -108,6 +106,7 @@ private fun RegistrationDialogPreview() {
                 fontSize = 14.sp
             )
         },
-        buttonText = "С помощью\nGoogle"
+        buttonText = "С помощью\nGoogle",
+        buttonOnClick = {}
     )
 }

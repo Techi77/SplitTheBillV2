@@ -1,5 +1,6 @@
 plugins {
     id("stb.appPlugin")
+    id("stb.firebasePlugin")
 }
 
 android {

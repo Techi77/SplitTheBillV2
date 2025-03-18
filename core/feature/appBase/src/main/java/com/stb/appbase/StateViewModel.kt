@@ -1,6 +1,5 @@
-package com.stb.splitthebill
+package com.stb.appbase
 
-import com.stb.splitthebill.appBase.UiState
 import kotlinx.coroutines.flow.StateFlow
 
 interface StateViewModel<State : UiState> {
