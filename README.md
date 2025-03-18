@@ -6,13 +6,15 @@
 
 [Figma](https://www.figma.com/design/6Mu54wNC688ClzRXvKahp6/)
 
-Язык: Kotlin
-Инструменты: GitHub, Figma, Firebase
 Стек:
+* Kotlin
+* GitHub, Figma, Firebase
 * MVMV+State, Clean Architecture, S.O.L.I.D
 * DI: Hilt, Dagger
 * Coroutines + Flow
 * Compose (без фрагментов) + Jetpack Navigation
 * DataStore
 * Gradle+Plugins
+
+
 ![image](https://github.com/user-attachments/assets/0b17cf50-0905-490e-904d-8ac8cf20dbac)
