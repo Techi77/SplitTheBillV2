@@ -15,6 +15,7 @@ class AppPlugin : Plugin<Project> {
                 apply(GradleConstants.Plugins.ANDROID_APPLICATION)
                 apply(GradleConstants.Plugins.KOTLIN_ANDROID)
                 apply(GradleConstants.Plugins.KOTLIN_SERIALIZATION)
+                apply(GradleConstants.Plugins.GOOGLE_SERVICES)
             }
 
             extensions.configure<ApplicationExtension> {
@@ -22,6 +23,7 @@ class AppPlugin : Plugin<Project> {
                     applicationId = GradleConstants.APP_ID
                 }
                 addCompose(this)
+                addUiHilt(this)
                 configureAndroidModule(this, project)
                 defaultConfig {
                     targetSdk = GradleConstants.SDK.TARGET_SDK

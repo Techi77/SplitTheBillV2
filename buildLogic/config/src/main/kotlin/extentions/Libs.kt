@@ -32,3 +32,16 @@ internal fun VersionCatalog.uiTestManifest() = findLibrary("androidx-ui-test-man
 internal fun VersionCatalog.junit() = findLibrary("junit").get()
 internal fun VersionCatalog.androidxJunit() = findLibrary("androidx-junit").get()
 internal fun VersionCatalog.espressoCore() = findLibrary("androidx-espresso-core").get()
+
+// Firebase
+internal fun VersionCatalog.firebaseBom() = findLibrary("firebase-bom").get()
+internal fun VersionCatalog.firebaseAuth() = findLibrary("firebase-auth").get()
+internal fun VersionCatalog.firebaseAnalytics() = findLibrary("firebase-analytics").get()
+
+//google auth
+internal fun VersionCatalog.googleFirebaseAuth() = findLibrary("google-firebase-auth").get()
+internal fun VersionCatalog.playServicesAuth() = findLibrary("play-services-auth").get()
+
+//hilt
+internal fun VersionCatalog.hiltAndroid() = findLibrary("hilt-android").get()
+internal fun VersionCatalog.hiltAndroidCompiler() = findLibrary("hilt-android-compiler").get()

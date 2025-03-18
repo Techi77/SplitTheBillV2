@@ -9,11 +9,17 @@ espressoCore = "3.6.1"
 kotlinxSerializationJson = "1.8.0"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
-composeBom = "2025.02.00"
-navigationCompose = "2.8.8"
+composeBom = "2025.03.00"
+navigationCompose = "2.8.9"
 compose_runtime = "1.7.8"
 material = "1.12.0"
 jetbrainsKotlinJvm = "2.1.10"
+google_services = "4.4.2"
+firebase = "33.10.0"
+firebaseAuth = "23.2.0"
+playServicesAuth = "21.3.0"
+hiltAndroid = "2.55"
+kotlin_ksp = "2.1.10-1.0.30"
 
 #прежде чем убирать "неиспользование" - пробить в Libs.kt
 [libraries]
@@ -38,7 +44,15 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "compose_runtime" }
-
+#firebase
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+google-firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+#hilt
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -48,4 +62,6 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-
+google-services = { id = "com.google.gms.google-services", version.ref = "google_services" }
+kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlin_ksp" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }

@@ -11,7 +11,7 @@ internal fun Project.addCompose(
     val libs = libs()
 
     commonExtension.apply {
-        pluginManager.apply(GradleConstants.Libs.KOTLIN_COMPOSE)
+        pluginManager.apply(GradleConstants.Plugins.KOTLIN_COMPOSE)
         buildFeatures {
             compose = true
         }

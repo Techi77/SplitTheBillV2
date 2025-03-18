@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "778653014553",
+    "project_id": "split-the-bill-68431",
+    "storage_bucket": "split-the-bill-68431.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:778653014553:android:5932289f7aef17eeba6888",
+        "android_client_info": {
+          "package_name": "com.stb.splitthebill"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClYZNO2hsIezvBgBAc3A7UPh5m7lzYeb8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

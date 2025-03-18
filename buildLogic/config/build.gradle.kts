@@ -41,4 +41,16 @@ gradlePlugin {
             implementationClass = "plugins.UiPlugin"
         }
     }
+    plugins {
+        register("corePlugin") {
+            id = "stb.corePlugin"
+            implementationClass = "plugins.CorePlugin"
+        }
+    }
+    plugins {
+        register("firebasePlugin") {
+            id = "stb.firebasePlugin"
+            implementationClass = "plugins.FirebasePlugin"
+        }
+    }
 }
