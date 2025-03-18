@@ -9,7 +9,7 @@ val BackgroundBlack = Color(0xFF2F2F2F)
 //white
 val White = Color(0xFFFFFFFF)
 val White_Transparency80 = Color(0xCCFFFFFF)
-val BackgroundWhite = Color(0xFFFFFFFF)
+val BackgroundWhite = Color(0xFFF5F5F5)
 
 //purple
 val MainPurple = Color(0xFFD73FC6)
