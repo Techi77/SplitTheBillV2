@@ -1,11 +1,12 @@
-package com.stb.theme
+package com.stb.components
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,7 +16,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.style.TextAlign
@@ -28,13 +28,14 @@ import com.stb.theme.ui.getColorTheme
 
 @Composable
 fun RegistrationDialog(
-    text: String,
+    modifier: Modifier = Modifier,
+    title: String? = null,
     body: (@Composable () -> Unit)? = null,
-    buttonText: String?,
-    buttonOnClick: (() -> Unit)? = null,
+    buttons:  @Composable() (ColumnScope.() -> Unit)? = null,
 ) {
     val shape = RoundedCornerShape(28.dp)
     Card(
+        modifier = modifier.animateContentSize(),
         colors = CardDefaults.cardColors().copy(
             containerColor = getColorTheme().primaryContainer
         ),
@@ -56,39 +57,22 @@ fun RegistrationDialog(
                 contentDescription = "",
                 modifier = Modifier.size(24.dp)
             )
-            Text(
-                text = text,
-                color = getColorTheme().onPrimaryContainer,
-                fontSize = 24.sp,
-                lineHeight = 28.sp,
-                textAlign = TextAlign.Center
+            title?.let {
+                Text(
+                    text = it,
+                    color = getColorTheme().onPrimaryContainer,
+                    fontSize = 24.sp,
+                    lineHeight = 28.sp,
+                    textAlign = TextAlign.Center
 
-            )
+                )
+            }
             body?.let {
                 it()
             }
-            if (!buttonText.isNullOrBlank() && buttonOnClick != null)
-                Card(
-                    modifier = Modifier
-                        .clickable { buttonOnClick() },
-                    colors = CardDefaults.cardColors().copy(
-                        containerColor = Color.Transparent
-                    ),
-                    shape = RoundedCornerShape(0.dp)
-                ) {
-                    Text(
-                        text = buttonText,
-                        color = getColorTheme().secondary,
-                        textAlign = TextAlign.Center,
-                        fontSize = 16.sp,
-                        lineHeight = 28.sp,
-                        modifier = Modifier
-                            .padding(
-                                vertical = 16.dp,
-                                horizontal = 44.dp
-                            )
-                    )
-                }
+            buttons?.let{
+                it()
+            }
         }
     }
 }
@@ -97,7 +81,7 @@ fun RegistrationDialog(
 @Preview
 private fun RegistrationDialogPreview() {
     RegistrationDialog(
-        text = "Войти или зарегестрироваться",
+        title = "Войти",
         body = {
             Text(
                 "разработчики точно запилят другие пути регистрации, а пока у них лапки",
@@ -106,7 +90,11 @@ private fun RegistrationDialogPreview() {
                 fontSize = 14.sp
             )
         },
-        buttonText = "С помощью\nGoogle",
-        buttonOnClick = {}
+        buttons = {
+            RegistrationDialogButton(
+                text = "С помощью\nGoogle",
+                onClick = {}
+            )
+        }
     )
 }

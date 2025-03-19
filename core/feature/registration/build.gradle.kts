@@ -1,6 +1,5 @@
 plugins {
     id("stb.corePlugin")
-    id("stb.firebasePlugin")
 }
 
 android {

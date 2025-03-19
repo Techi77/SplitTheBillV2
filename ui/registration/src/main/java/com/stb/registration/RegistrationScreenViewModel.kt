@@ -26,6 +26,38 @@ class RegistrationScreenViewModel @Inject constructor() :
     BaseViewModel<RegistrationUiState, Nothing>() {
     override fun createInitialState(): RegistrationUiState = RegistrationUiState()
 
+    fun setSwitcherState(index: Int){
+        updateState {
+            copy(
+                switcherState = Switcher.entries[index]
+            )
+        }
+    }
+
+    fun setEmail(email: String){
+        updateState {
+            copy(
+                email = email
+            )
+        }
+    }
+
+    fun setPassword(password: String){
+        updateState {
+            copy(
+                password = password
+            )
+        }
+    }
+
+    fun setPasswordConfirm(password: String){
+        updateState {
+            copy(
+                confirmPassword = password
+            )
+        }
+    }
+
     private val auth: FirebaseAuth by lazy { Firebase.auth }
 
     private val googleIdOption = GetGoogleIdOption.Builder()
@@ -42,7 +74,6 @@ class RegistrationScreenViewModel @Inject constructor() :
             val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
             firebaseAuthWithGoogle(googleIdTokenCredential.idToken, activity = activity)
         } else {
-            println("Techi: error = Wrong credential")
             updateState {
                 copy(error = Exception("Wrong credential"))
             }
@@ -54,14 +85,12 @@ class RegistrationScreenViewModel @Inject constructor() :
         auth.signInWithCredential(credential)
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {
-                    println("Techi: Success auth user = ${auth.currentUser}")
                     updateState {
                         copy(
                             user = auth.currentUser
                         )
                     }
                 } else {
-                    println("Techi: error = ${task.exception}")
                     updateState {
                         copy(
                             error = task.exception
@@ -72,7 +101,6 @@ class RegistrationScreenViewModel @Inject constructor() :
     }
 
     fun signInWithGoogle(activity: Activity) {
-        println("Techi: signInWithGoogle")
         val credentialManager = CredentialManager.create(activity)
         credentialManager.getCredentialAsync(
             request = request,

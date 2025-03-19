@@ -1,4 +1,9 @@
 <resources>
-    <string name="login_or_register">Войти или зарегестрироваться</string>
-    <string name="by_google">С помощью\nGoogle</string>
+    <string name="login">Вход</string>
+    <string name="registration">Регистрация</string>
+    <string name="by_google">Google авторизация</string>
+    <string name="email">E-mail</string>
+    <string name="password">Пароль</string>
+    <string name="confirm_password">Подтверждение пароля</string>
+    <string name="go">Дальше</string>
 </resources>

@@ -2,6 +2,7 @@ package com.stb.theme.ui
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
@@ -25,7 +26,13 @@ private val LightColorScheme = lightColorScheme(
     secondary = MainBlue,
     //Цвет, который контрастирует с secondary. Используется для текста или иконок на фоне secondary.
     //Пример: Текст на кнопке с цветом secondary.
-    onSecondary = White
+    onSecondary = White,
+    //Цвет для границ элементов.
+    //Пример: Граница текстового поля.
+    outline = BorderBlack,
+    //Цвет для отображения ошибок.
+    //Пример: Текст ошибки, иконка ошибки.
+    error = ErrorRed
 )
 
 private val DarkColorScheme = darkColorScheme(
@@ -35,6 +42,8 @@ private val DarkColorScheme = darkColorScheme(
     onPrimaryContainer = White_Transparency80,
     secondaryContainer = MainBlueDark,
     onSecondary = White_Transparency80,
+    outline = BorderWhite,
+    error = ErrorRedDark
 )
 
 @Composable
@@ -50,4 +59,19 @@ fun SplitTheBillTheme(
 
 @Composable
 @ReadOnlyComposable
-fun getColorTheme() = if (isSystemInDarkTheme()) DarkColorScheme else LightColorScheme
+fun getColorTheme(inverse: Boolean = false) =
+    if ((!inverse && isSystemInDarkTheme()) || (inverse && !isSystemInDarkTheme())) DarkColorScheme
+    else LightColorScheme
+
+@Composable
+fun getBaseOutlinedTextFieldColors() = OutlinedTextFieldDefaults.colors(
+    focusedTextColor = getColorTheme().onPrimaryContainer,
+    focusedBorderColor = getColorTheme().secondary,
+    focusedLabelColor = getColorTheme().secondary,
+    unfocusedBorderColor = getColorTheme().onPrimaryContainer,
+    unfocusedLabelColor = getColorTheme().onPrimaryContainer,
+    errorTextColor = getColorTheme().onPrimaryContainer,
+    errorPlaceholderColor = getColorTheme().error,
+    errorLabelColor = getColorTheme().error,
+    errorSupportingTextColor = getColorTheme().error,
+)

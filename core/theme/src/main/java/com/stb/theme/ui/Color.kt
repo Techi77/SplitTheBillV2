@@ -5,11 +5,17 @@ import androidx.compose.ui.graphics.Color
 //black
 val Black_Transparency80 = Color(0xCC000000)
 val BackgroundBlack = Color(0xFF2F2F2F)
+val BorderBlack = Color(0x801D2A38)
 
 //white
 val White = Color(0xFFFFFFFF)
 val White_Transparency80 = Color(0xCCFFFFFF)
 val BackgroundWhite = Color(0xFFF5F5F5)
+val BorderWhite = Color(0x4DE2D5C7)
+
+//error
+val ErrorRed = Color(0xFFD90421)
+val ErrorRedDark = Color(0xFFA31515)
 
 //purple
 val MainPurple = Color(0xFFD73FC6)
@@ -21,4 +27,4 @@ val MainBlueDark = Color(0xFF4A5BE7)
 
 //border
 val Border = Color(0x4D1D2A38)
-val BorderDark = Color(0x4D679CD5)
+val BorderDark = Color(0x80679CD5)
