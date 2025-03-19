@@ -74,4 +74,8 @@ fun getBaseOutlinedTextFieldColors() = OutlinedTextFieldDefaults.colors(
     errorPlaceholderColor = getColorTheme().error,
     errorLabelColor = getColorTheme().error,
     errorSupportingTextColor = getColorTheme().error,
+    // TrailingIcon
+    errorTrailingIconColor = getColorTheme().onPrimaryContainer,
+    focusedTrailingIconColor = getColorTheme().onPrimaryContainer,
+    unfocusedTrailingIconColor = getColorTheme().onPrimaryContainer,
 )

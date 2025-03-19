@@ -125,7 +125,7 @@ private fun RegistrationCard(
         ) {
             item(key = "Pizza") {
                 Image(
-                    bitmap = ImageBitmap.imageResource(com.stb.components.R.drawable.ic_pizza),
+                    bitmap = ImageBitmap.imageResource(MainR.drawable.ic_pizza),
                     contentDescription = "",
                     modifier = Modifier
                         .size(24.dp)
@@ -216,7 +216,8 @@ private fun LazyListScope.dialogBody(
                     )
                 )
             },
-            labelText = stringResource(R.string.password)
+            labelText = stringResource(R.string.password),
+            isPassword = true
         )
     }
     if (state.switcherState == Switcher.REGISTRATION) {
@@ -236,7 +237,8 @@ private fun LazyListScope.dialogBody(
                         )
                     )
                 },
-                labelText = stringResource(R.string.confirm_password)
+                labelText = stringResource(R.string.confirm_password),
+                isPassword = true
             )
         }
     }
