@@ -53,4 +53,10 @@ gradlePlugin {
             implementationClass = "plugins.FirebasePlugin"
         }
     }
+    plugins {
+        register("appBasePlugin") {
+            id = "stb.appBasePlugin"
+            implementationClass = "plugins.AppBasePlugin"
+        }
+    }
 }
