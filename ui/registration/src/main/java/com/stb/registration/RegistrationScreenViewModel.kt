@@ -23,42 +23,103 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegistrationScreenViewModel @Inject constructor() :
-    BaseViewModel<RegistrationUiState, Nothing>() {
+    BaseViewModel<RegistrationUiState, RegistrationUiEvent>() {
     override fun createInitialState(): RegistrationUiState = RegistrationUiState()
 
-    fun setSwitcherState(index: Int){
+    private fun checkButtonEnabled() {
+        val state = state.value
+        updateState {
+            copy(
+                buttonEnabled = (state.email.isNotBlank() && state.password.isNotBlank() &&
+                        (state.confirmPassword.isNotBlank() || state.switcherState == Switcher.LOGIN))
+            )
+        }
+    }
+
+    fun setSwitcherState(index: Int) {
         updateState {
             copy(
                 switcherState = Switcher.entries[index]
             )
         }
+        checkButtonEnabled()
     }
 
-    fun setEmail(email: String){
+    fun setEmail(email: String) {
         updateState {
             copy(
                 email = email
             )
         }
+        checkButtonEnabled()
     }
 
-    fun setPassword(password: String){
+    fun setPassword(password: String) {
         updateState {
             copy(
                 password = password
             )
         }
+        checkButtonEnabled()
     }
 
-    fun setPasswordConfirm(password: String){
+    fun setPasswordConfirm(password: String) {
         updateState {
             copy(
                 confirmPassword = password
             )
         }
+        checkButtonEnabled()
     }
 
     private val auth: FirebaseAuth by lazy { Firebase.auth }
+
+    fun loginOrRegisterByEmailAndPassword(activity: Activity) {
+        if (state.value.switcherState == Switcher.REGISTRATION) {
+            registerByEmailAndPassword(activity)
+        } else loginByEmailAndPassword(activity)
+    }
+
+    // REGISTER BY EMAIL+PASSWORD
+
+    private fun registerByEmailAndPassword(activity: Activity) {
+        println("Techi: registerByEmailAndPassword")
+        auth.createUserWithEmailAndPassword(state.value.email, state.value.password)
+            .addOnCompleteListener(activity) { task ->
+                println("Techi: registerByEmailAndPassword addOnCompleteListener task=$task")
+                if (task.isSuccessful) {
+                    updateState {
+                        copy(
+                            user = auth.currentUser
+                        )
+                    }
+                } else {
+                    task.exception?.let { pushEvent(RegistrationUiEvent.CatchError(it)) }
+                }
+            }
+    }
+
+    // LOGIN BY EMAIL+PASSWORD
+
+    private fun loginByEmailAndPassword(activity: Activity) {
+        println("Techi: loginByEmailAndPassword")
+        auth.signInWithEmailAndPassword(state.value.email, state.value.password)
+            .addOnCompleteListener(activity) { task ->
+                println("Techi: loginByEmailAndPassword addOnCompleteListener task=$task")
+                if (task.isSuccessful) {
+                    println("Techi: loginByEmailAndPassword task is successful")
+                    updateState {
+                        copy(
+                            user = auth.currentUser
+                        )
+                    }
+                } else {
+                    task.exception?.let { pushEvent(RegistrationUiEvent.CatchError(it)) }
+                }
+            }
+    }
+
+    // LOGIN BY GOOGLE
 
     private val googleIdOption = GetGoogleIdOption.Builder()
         .setServerClientId(WEB_CLIENT_ID)
@@ -74,9 +135,7 @@ class RegistrationScreenViewModel @Inject constructor() :
             val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
             firebaseAuthWithGoogle(googleIdTokenCredential.idToken, activity = activity)
         } else {
-            updateState {
-                copy(error = Exception("Wrong credential"))
-            }
+            pushEvent(RegistrationUiEvent.CatchError(Exception("Wrong credential")))
         }
     }
 
@@ -91,11 +150,7 @@ class RegistrationScreenViewModel @Inject constructor() :
                         )
                     }
                 } else {
-                    updateState {
-                        copy(
-                            error = task.exception
-                        )
-                    }
+                    task.exception?.let { pushEvent(RegistrationUiEvent.CatchError(it)) }
                 }
             }
     }
@@ -115,11 +170,7 @@ class RegistrationScreenViewModel @Inject constructor() :
                 }
 
                 override fun onError(e: GetCredentialException) {
-                    updateState {
-                        copy(
-                            error = e
-                        )
-                    }
+                    pushEvent(RegistrationUiEvent.CatchError(e))
                 }
             }
         )

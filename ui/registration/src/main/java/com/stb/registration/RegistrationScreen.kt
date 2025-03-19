@@ -39,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.stb.appbase.CollectAsEventWithLifecycle
 import com.stb.components.RegistrationDialogButton
 import com.stb.components.StbTextField
 import com.stb.components.SwitcherWithText
@@ -54,6 +55,15 @@ fun RegistrationScreen(
 ) {
     val activity = LocalActivity.current
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    viewModel.events.CollectAsEventWithLifecycle {
+        when (it) {
+            is RegistrationUiEvent.CatchError -> it.error.message?.let { message ->
+                showToast(message)
+            }
+        }
+    }
+
     Scaffold { paddingValues ->
         RegistrationCard(
             paddingValues = paddingValues,
@@ -78,6 +88,11 @@ fun RegistrationScreen(
 
                         is RegistrationAction.SetPasswordConfirm ->
                             viewModel.setPasswordConfirm(action.passwordConfirm)
+
+                        RegistrationAction.GoButtonClick ->
+                            activity?.let {
+                                viewModel.loginOrRegisterByEmailAndPassword(it)
+                            }
                     }
                 }
             },
@@ -238,7 +253,11 @@ private fun LazyListScope.dialogBody(
                     )
                 },
                 labelText = stringResource(R.string.confirm_password),
-                isPassword = true
+                isPassword = true,
+                errorText =
+                if (state.confirmPassword.isNotBlank() && state.confirmPassword != state.password)
+                    stringResource(R.string.passwords_do_not_match)
+                else null
             )
         }
     }
@@ -251,11 +270,12 @@ private fun LazyListScope.dialogBody(
                 .animateItem()
                 .widthIn(min = 200.dp),
             onClick = {
-                //TODO
+                actionHandler(RegistrationAction.GoButtonClick)
             },
             colors = ButtonDefaults.buttonColors().copy(
                 containerColor = getColorTheme().primary
-            )
+            ),
+            enabled = state.buttonEnabled
         ) {
             Text(stringResource(R.string.go))
         }
@@ -273,6 +293,7 @@ private sealed interface RegistrationAction {
     data class SetEmail(val email: String) : RegistrationAction
     data class SetPassword(val password: String) : RegistrationAction
     data class SetPasswordConfirm(val passwordConfirm: String) : RegistrationAction
+    data object GoButtonClick : RegistrationAction
 }
 
 @Composable

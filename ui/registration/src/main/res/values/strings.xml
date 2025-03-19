@@ -6,4 +6,5 @@
     <string name="password">Пароль</string>
     <string name="confirm_password">Подтверждение пароля</string>
     <string name="go">Дальше</string>
+    <string name="passwords_do_not_match">Пароли не совпадают</string>
 </resources>
