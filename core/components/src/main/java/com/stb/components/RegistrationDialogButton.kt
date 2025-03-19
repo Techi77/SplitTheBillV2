@@ -18,11 +18,11 @@ import com.stb.theme.ui.getColorTheme
 @Composable
 fun RegistrationDialogButton(
     text: String,
-    onClick: (() -> Unit)
-){
+    onClick: (() -> Unit),
+    modifier: Modifier = Modifier
+) {
     Card(
-        modifier = Modifier
-            .clickable { onClick() },
+        modifier = modifier.clickable { onClick() },
         colors = CardDefaults.cardColors().copy(
             containerColor = Color.Transparent
         ),
@@ -45,7 +45,7 @@ fun RegistrationDialogButton(
 
 @Composable
 @Preview
-private fun RegistrationDialogButtonPreview(){
+private fun RegistrationDialogButtonPreview() {
     RegistrationDialogButton(
         text = "С помощью\nGoogle",
         onClick = {}
