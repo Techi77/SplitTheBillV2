@@ -27,7 +27,8 @@ fun StbTextField(
     labelText: String,
     errorText: String? = null,
     singleLine: Boolean = true,
-    isPassword: Boolean = false
+    isPassword: Boolean = false,
+    infoText: (@Composable () -> Unit)? = null,
 ) {
     var passwordVisible by rememberSaveable { mutableStateOf(!isPassword) }
     OutlinedTextField(
@@ -39,7 +40,7 @@ fun StbTextField(
         },
         colors = getBaseOutlinedTextFieldColors(),
         isError = !errorText.isNullOrBlank(),
-        supportingText = errorText?.let { { Text(it) } },
+        supportingText = errorText?.let { { Text(it) } } ?: infoText?.let { { it() } },
         singleLine = singleLine,
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = if (isPassword) {

@@ -65,11 +65,15 @@ fun getColorTheme(inverse: Boolean = false) =
 
 @Composable
 fun getBaseOutlinedTextFieldColors() = OutlinedTextFieldDefaults.colors(
+    //focused
     focusedTextColor = getColorTheme().onPrimaryContainer,
     focusedBorderColor = getColorTheme().secondary,
     focusedLabelColor = getColorTheme().secondary,
+    //unfocused
     unfocusedBorderColor = getColorTheme().onPrimaryContainer,
     unfocusedLabelColor = getColorTheme().onPrimaryContainer,
+    unfocusedSupportingTextColor = getColorTheme().onPrimaryContainer,
+    // error
     errorTextColor = getColorTheme().onPrimaryContainer,
     errorPlaceholderColor = getColorTheme().error,
     errorLabelColor = getColorTheme().error,

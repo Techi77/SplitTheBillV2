@@ -14,8 +14,14 @@ data class RegistrationUiState(
     val password: String = "",
     val confirmPassword: String = "",
     val switcherState: Switcher = Switcher.LOGIN,
-    val buttonEnabled: Boolean = false
-) : UiState
+    val buttonEnabled: Boolean = false,
+    val passwordRequirements: PasswordConditions = PasswordConditions(
+        fourOrMoreDigits = null,
+        fourOrMoreLetters = null
+    )
+) : UiState {
+    data class PasswordConditions(val fourOrMoreDigits: Boolean?, val fourOrMoreLetters: Boolean?)
+}
 
 enum class Switcher(@StringRes val textRes: Int) {
     LOGIN(R.string.login),

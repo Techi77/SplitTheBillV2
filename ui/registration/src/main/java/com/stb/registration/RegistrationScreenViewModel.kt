@@ -27,13 +27,23 @@ class RegistrationScreenViewModel @Inject constructor() :
     override fun createInitialState(): RegistrationUiState = RegistrationUiState()
 
     private fun checkButtonEnabled() {
-        val state = state.value
         updateState {
             copy(
-                buttonEnabled = (state.email.isNotBlank() && state.password.isNotBlank() &&
-                        (state.confirmPassword.isNotBlank() || state.switcherState == Switcher.LOGIN))
+                buttonEnabled = emailCheck() && passwordCheck() && confirmPasswordCheck()
             )
         }
+    }
+
+    private fun emailCheck() = state.value.email.isNotBlank()
+    private fun passwordCheck() = state.value.password.isNotBlank() &&
+            (state.value.passwordRequirements == RegistrationUiState.PasswordConditions(
+                fourOrMoreLetters = true,
+                fourOrMoreDigits = true
+            ) || state.value.switcherState == Switcher.LOGIN)
+
+    private fun confirmPasswordCheck() = with(state.value) {
+        (confirmPassword == password)
+                || switcherState == Switcher.LOGIN
     }
 
     fun setSwitcherState(index: Int) {
@@ -57,10 +67,24 @@ class RegistrationScreenViewModel @Inject constructor() :
     fun setPassword(password: String) {
         updateState {
             copy(
-                password = password
+                password = password,
+                passwordRequirements = RegistrationUiState.PasswordConditions(
+                    fourOrMoreDigits = password.hasFourOrMoreDigits(),
+                    fourOrMoreLetters = password.hasFourOrMoreLetters(),
+                )
             )
         }
         checkButtonEnabled()
+    }
+
+    private fun String.hasFourOrMoreDigits(): Boolean {
+        val regex = Regex("\\d{4,}")
+        return regex.containsMatchIn(this)
+    }
+
+    private fun String.hasFourOrMoreLetters(): Boolean {
+        val regex = Regex("[a-zA-Zа-яА-Я]{4,}")
+        return regex.containsMatchIn(this)
     }
 
     fun setPasswordConfirm(password: String) {

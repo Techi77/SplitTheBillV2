@@ -7,4 +7,7 @@
     <string name="confirm_password">Подтверждение пароля</string>
     <string name="go">Дальше</string>
     <string name="passwords_do_not_match">Пароли не совпадают</string>
+    <string name="four_letters">4 буквы</string>
+    <string name="four_numbers">4 цифры</string>
+    <string name="password_requirements">, и всё будет круто!</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.stb.registration
 
+import android.content.res.Configuration
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -35,6 +37,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -45,6 +50,8 @@ import com.stb.components.StbTextField
 import com.stb.components.SwitcherWithText
 import com.stb.theme.ui.Border
 import com.stb.theme.ui.BorderDark
+import com.stb.theme.ui.Green
+import com.stb.theme.ui.LightGreen
 import com.stb.theme.ui.getColorTheme
 import com.stb.ui.registration.R
 import com.stb.components.R as MainR
@@ -161,7 +168,7 @@ private fun RegistrationCard(
                     modifier = Modifier.animateItem()
                 ) {
                     HorizontalDivider(modifier = Modifier.weight(1f))
-                    Text("Или быстрее")
+                    Text(text = "Или быстрее", color = getColorTheme().onPrimaryContainer)
                     HorizontalDivider(modifier = Modifier.weight(1f))
                 }
             }
@@ -232,7 +239,10 @@ private fun LazyListScope.dialogBody(
                 )
             },
             labelText = stringResource(R.string.password),
-            isPassword = true
+            isPassword = true,
+            infoText = if (state.switcherState == Switcher.REGISTRATION) {
+                { BasicText(text = passwordInfo(state)) }
+            } else null
         )
     }
     if (state.switcherState == Switcher.REGISTRATION) {
@@ -255,9 +265,9 @@ private fun LazyListScope.dialogBody(
                 labelText = stringResource(R.string.confirm_password),
                 isPassword = true,
                 errorText =
-                if (state.confirmPassword.isNotBlank() && state.confirmPassword != state.password)
-                    stringResource(R.string.passwords_do_not_match)
-                else null
+                    if (state.confirmPassword.isNotBlank() && state.confirmPassword != state.password)
+                        stringResource(R.string.passwords_do_not_match)
+                    else null
             )
         }
     }
@@ -273,7 +283,9 @@ private fun LazyListScope.dialogBody(
                 actionHandler(RegistrationAction.GoButtonClick)
             },
             colors = ButtonDefaults.buttonColors().copy(
-                containerColor = getColorTheme().primary
+                containerColor = getColorTheme().primary,
+                disabledContainerColor = getColorTheme(inverse = true).primaryContainer.copy(alpha = 0.1f),
+                disabledContentColor = getColorTheme().onPrimaryContainer.copy(alpha = 0.5f)
             ),
             enabled = state.buttonEnabled
         ) {
@@ -281,6 +293,48 @@ private fun LazyListScope.dialogBody(
         }
     }
 }
+
+@Composable
+private fun passwordInfo(state: RegistrationUiState) = buildAnnotatedString {
+        val fourOrMoreLetters = state.passwordRequirements.fourOrMoreLetters
+        withStyle(
+            style = SpanStyle(
+                color =
+                    if (fourOrMoreLetters == null) getColorTheme().onPrimaryContainer
+                    else if (fourOrMoreLetters && isSystemInDarkTheme()) LightGreen
+                    else if (fourOrMoreLetters) Green
+                    else getColorTheme().error
+            )
+        ) {
+            append(stringResource(R.string.four_letters))
+        }
+        withStyle(
+            SpanStyle(
+                color = getColorTheme().onPrimaryContainer
+            )
+        ) {
+            append(" + ")
+        }
+        val fourOrMoreDigits = state.passwordRequirements.fourOrMoreDigits
+        withStyle(
+            style = SpanStyle(
+                color =
+                    if (fourOrMoreDigits == null) getColorTheme().onPrimaryContainer
+                    else if (fourOrMoreDigits && isSystemInDarkTheme()) LightGreen
+                    else if (fourOrMoreDigits) Green
+                    else getColorTheme().error
+            )
+        ) {
+            append(stringResource(R.string.four_numbers))
+        }
+        withStyle(
+            SpanStyle(
+                color = getColorTheme().onPrimaryContainer
+            )
+        ) {
+            append(stringResource(R.string.password_requirements))
+        }
+    }
 
 private enum class RegistrationContentType {
     SWITCHER, TEXT_FIELD, GO_BUTTON, DIVIDER
@@ -300,6 +354,24 @@ private sealed interface RegistrationAction {
 @Preview
 private fun RegistrationCardPreview() {
     RegistrationCard(
-        state = RegistrationUiState()
+        state = RegistrationUiState(
+            passwordRequirements = RegistrationUiState.PasswordConditions(
+                fourOrMoreDigits = true,
+                fourOrMoreLetters = false
+            )
+        )
+    )
+}
+
+@Composable
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+private fun RegistrationCardDarkThemePreview() {
+    RegistrationCard(
+        state = RegistrationUiState(
+            passwordRequirements = RegistrationUiState.PasswordConditions(
+                fourOrMoreDigits = true,
+                fourOrMoreLetters = false
+            )
+        )
     )
 }
