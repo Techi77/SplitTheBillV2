@@ -99,6 +99,11 @@ class RegistrationScreenViewModel @Inject constructor() :
     private val auth: FirebaseAuth by lazy { Firebase.auth }
 
     fun loginOrRegisterByEmailAndPassword(activity: Activity) {
+        updateState {
+            copy(
+                showProgress = true
+            )
+        }
         if (state.value.switcherState == Switcher.REGISTRATION) {
             registerByEmailAndPassword(activity)
         } else loginByEmailAndPassword(activity)
@@ -120,6 +125,11 @@ class RegistrationScreenViewModel @Inject constructor() :
                 } else {
                     task.exception?.let { pushEvent(RegistrationUiEvent.CatchError(it)) }
                 }
+                updateState {
+                    copy(
+                        showProgress = false
+                    )
+                }
             }
     }
 
@@ -140,6 +150,11 @@ class RegistrationScreenViewModel @Inject constructor() :
                 } else {
                     task.exception?.let { pushEvent(RegistrationUiEvent.CatchError(it)) }
                 }
+                updateState {
+                    copy(
+                        showProgress = false
+                    )
+                }
             }
     }
 
@@ -155,10 +170,25 @@ class RegistrationScreenViewModel @Inject constructor() :
         .build()
 
     private fun handleSignIn(credential: Credential, activity: Activity) {
+        updateState {
+            copy(
+                showProgress = true
+            )
+        }
         if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
             val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
             firebaseAuthWithGoogle(googleIdTokenCredential.idToken, activity = activity)
+            updateState {
+                copy(
+                    showProgress = false
+                )
+            }
         } else {
+            updateState {
+                copy(
+                    showProgress = false
+                )
+            }
             pushEvent(RegistrationUiEvent.CatchError(Exception("Wrong credential")))
         }
     }

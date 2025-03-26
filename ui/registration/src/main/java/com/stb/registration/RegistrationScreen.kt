@@ -3,18 +3,20 @@ package com.stb.registration
 import android.content.res.Configuration
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -22,6 +24,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -31,11 +34,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.imageResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -71,60 +72,58 @@ fun RegistrationScreen(
         }
     }
 
-    Scaffold { paddingValues ->
-        RegistrationCard(
-            paddingValues = paddingValues,
-            actionHandler = remember {
-                { action ->
-                    when (action) {
-                        RegistrationAction.LogInByGoogle -> {
-                            activity?.let {
-                                viewModel.signInWithGoogle(it)
+    Scaffold(
+        contentColor = getColorTheme().primaryContainer
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            contentAlignment = Alignment.Center
+        ) {
+            RegistrationCard(
+                actionHandler = remember {
+                    { action ->
+                        when (action) {
+                            RegistrationAction.LogInByGoogle -> {
+                                activity?.let {
+                                    viewModel.signInWithGoogle(it)
+                                }
                             }
-                        }
 
-                        is RegistrationAction.SwitcherSelect -> {
-                            viewModel.setSwitcherState(action.index)
-                        }
-
-                        is RegistrationAction.SetEmail ->
-                            viewModel.setEmail(action.email)
-
-                        is RegistrationAction.SetPassword ->
-                            viewModel.setPassword(action.password)
-
-                        is RegistrationAction.SetPasswordConfirm ->
-                            viewModel.setPasswordConfirm(action.passwordConfirm)
-
-                        RegistrationAction.GoButtonClick ->
-                            activity?.let {
-                                viewModel.loginOrRegisterByEmailAndPassword(it)
+                            is RegistrationAction.SwitcherSelect -> {
+                                viewModel.setSwitcherState(action.index)
                             }
+
+                            is RegistrationAction.SetEmail ->
+                                viewModel.setEmail(action.email)
+
+                            is RegistrationAction.SetPassword ->
+                                viewModel.setPassword(action.password)
+
+                            is RegistrationAction.SetPasswordConfirm ->
+                                viewModel.setPasswordConfirm(action.passwordConfirm)
+
+                            RegistrationAction.GoButtonClick ->
+                                activity?.let {
+                                    viewModel.loginOrRegisterByEmailAndPassword(it)
+                                }
+                        }
                     }
-                }
-            },
-            state = state
-        )
+                },
+                state = state
+            )
+        }
     }
 }
 
 @Composable
 private fun RegistrationCard(
-    paddingValues: PaddingValues = PaddingValues(),
     actionHandler: (RegistrationAction) -> Unit = {},
     state: RegistrationUiState
 ) {
     Box(
         modifier = Modifier
-            .paint(
-                painter = painterResource(
-                    if (isSystemInDarkTheme()) MainR.drawable.bg_gradient_dark
-                    else MainR.drawable.bg_gradient_light
-                ),
-                contentScale = ContentScale.FillBounds
-            )
-            .fillMaxSize()
-            .padding(paddingValues)
             .padding(horizontal = 24.dp),
         contentAlignment = Alignment.Center
     ) {
@@ -182,6 +181,26 @@ private fun RegistrationCard(
                 )
             }
         }
+        val alpha by animateFloatAsState(
+            targetValue = if (state.showProgress) 1f else 0f,
+            animationSpec = tween(durationMillis = 300),
+            label = "progressAlphaAnimation"
+        )
+        if (alpha > 0f)
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .graphicsLayer { this.alpha = alpha }
+                    .background(
+                        getColorTheme().primaryContainer,
+                        shape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.width(64.dp),
+                )
+            }
     }
 }
 
@@ -296,45 +315,45 @@ private fun LazyListScope.dialogBody(
 
 @Composable
 private fun passwordInfo(state: RegistrationUiState) = buildAnnotatedString {
-        val fourOrMoreLetters = state.passwordRequirements.fourOrMoreLetters
-        withStyle(
-            style = SpanStyle(
-                color =
-                    if (fourOrMoreLetters == null) getColorTheme().onPrimaryContainer
-                    else if (fourOrMoreLetters && isSystemInDarkTheme()) LightGreen
-                    else if (fourOrMoreLetters) Green
-                    else getColorTheme().error
-            )
-        ) {
-            append(stringResource(R.string.four_letters))
-        }
-        withStyle(
-            SpanStyle(
-                color = getColorTheme().onPrimaryContainer
-            )
-        ) {
-            append(" + ")
-        }
-        val fourOrMoreDigits = state.passwordRequirements.fourOrMoreDigits
-        withStyle(
-            style = SpanStyle(
-                color =
-                    if (fourOrMoreDigits == null) getColorTheme().onPrimaryContainer
-                    else if (fourOrMoreDigits && isSystemInDarkTheme()) LightGreen
-                    else if (fourOrMoreDigits) Green
-                    else getColorTheme().error
-            )
-        ) {
-            append(stringResource(R.string.four_numbers))
-        }
-        withStyle(
-            SpanStyle(
-                color = getColorTheme().onPrimaryContainer
-            )
-        ) {
-            append(stringResource(R.string.password_requirements))
-        }
+    val fourOrMoreLetters = state.passwordRequirements.fourOrMoreLetters
+    withStyle(
+        style = SpanStyle(
+            color =
+                if (fourOrMoreLetters == null) getColorTheme().onPrimaryContainer
+                else if (fourOrMoreLetters && isSystemInDarkTheme()) LightGreen
+                else if (fourOrMoreLetters) Green
+                else getColorTheme().error
+        )
+    ) {
+        append(stringResource(R.string.four_letters))
     }
+    withStyle(
+        SpanStyle(
+            color = getColorTheme().onPrimaryContainer
+        )
+    ) {
+        append(" + ")
+    }
+    val fourOrMoreDigits = state.passwordRequirements.fourOrMoreDigits
+    withStyle(
+        style = SpanStyle(
+            color =
+                if (fourOrMoreDigits == null) getColorTheme().onPrimaryContainer
+                else if (fourOrMoreDigits && isSystemInDarkTheme()) LightGreen
+                else if (fourOrMoreDigits) Green
+                else getColorTheme().error
+        )
+    ) {
+        append(stringResource(R.string.four_numbers))
+    }
+    withStyle(
+        SpanStyle(
+            color = getColorTheme().onPrimaryContainer
+        )
+    ) {
+        append(stringResource(R.string.password_requirements))
+    }
+}
 
 private enum class RegistrationContentType {
     SWITCHER, TEXT_FIELD, GO_BUTTON, DIVIDER
@@ -371,7 +390,8 @@ private fun RegistrationCardDarkThemePreview() {
             passwordRequirements = RegistrationUiState.PasswordConditions(
                 fourOrMoreDigits = true,
                 fourOrMoreLetters = false
-            )
+            ),
+            showProgress = true
         )
     )
 }
