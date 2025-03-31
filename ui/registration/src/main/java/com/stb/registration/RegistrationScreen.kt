@@ -65,8 +65,14 @@ fun RegistrationScreen(
 
     viewModel.events.CollectAsEventWithLifecycle {
         when (it) {
-            is RegistrationUiEvent.CatchError ->
-                showToast(it.error.message ?: stringResource(MainR.string.standard_error))
+            is RegistrationUiEvent.CatchError -> {
+                val errorMessage = when {
+                    it.error.message.isNullOrBlank() -> stringResource(MainR.string.standard_error)
+                    it.error.message!!.startsWith(NO_SUCH_EMAIL_ERROR) -> stringResource(R.string.no_user)
+                    else -> it.error.message!!
+                }
+                showToast(errorMessage)
+            }
         }
     }
 
@@ -392,3 +398,5 @@ private fun RegistrationCardDarkThemePreview() {
         )
     )
 }
+
+private const val NO_SUCH_EMAIL_ERROR = "There is no user record corresponding to this identifier."

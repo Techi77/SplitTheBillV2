@@ -31,7 +31,7 @@ fun <T : UiEvent> Flow<T>.CollectAsEventWithLifecycle(
                 get() = contextRemember
 
             override fun showToast(message: String) {
-                Toast.makeText(contextRemember, message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(contextRemember, message, Toast.LENGTH_LONG).show()
             }
 
             override fun stringResource(resId: Int, vararg args: Any) = contextRemember.getString(resId, *args)
