@@ -230,7 +230,10 @@ private fun LazyListScope.dialogBody(
                     )
                 )
             },
-            labelText = stringResource(R.string.email)
+            labelText = stringResource(R.string.email),
+            errorText = if (!state.isValidEmail && state.switcherState == Switcher.REGISTRATION)
+                stringResource(R.string.email_is_not_valid)
+            else null
         )
     }
     item(

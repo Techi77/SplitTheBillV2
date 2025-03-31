@@ -19,7 +19,8 @@ data class RegistrationUiState(
         fourOrMoreDigits = null,
         fourOrMoreLetters = null
     ),
-    val showProgress: Boolean = false
+    val showProgress: Boolean = false,
+    val isValidEmail: Boolean = true
 ) : UiState {
     data class PasswordConditions(val fourOrMoreDigits: Boolean?, val fourOrMoreLetters: Boolean?)
 }

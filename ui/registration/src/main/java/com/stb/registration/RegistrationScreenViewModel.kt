@@ -20,7 +20,12 @@ class RegistrationScreenViewModel @Inject constructor(
         }
     }
 
-    private fun emailCheck() = state.value.email.isNotBlank()
+    private fun emailCheck() =
+        with(state.value) {
+            email.isNotBlank() &&
+                    (isValidEmail || switcherState == Switcher.LOGIN)
+        }
+
     private fun passwordCheck() = state.value.password.isNotBlank() &&
             (state.value.passwordRequirements == RegistrationUiState.PasswordConditions(
                 fourOrMoreLetters = true,
@@ -44,11 +49,13 @@ class RegistrationScreenViewModel @Inject constructor(
     fun setEmail(email: String) {
         updateState {
             copy(
-                email = email
+                email = email,
+                isValidEmail = email.isValidEmail()
             )
         }
         checkButtonEnabled()
     }
+
 
     fun setPassword(password: String) {
         updateState {
@@ -61,6 +68,11 @@ class RegistrationScreenViewModel @Inject constructor(
             )
         }
         checkButtonEnabled()
+    }
+
+    private fun String.isValidEmail(): Boolean {
+        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\$"
+        return matches(emailRegex.toRegex())
     }
 
     private fun String.hasFourOrMoreDigits(): Boolean {
