@@ -9,7 +9,6 @@ import java.lang.Exception
 
 data class RegistrationUiState(
     val user: FirebaseUser? = null,
-    val error: Exception? = null,
     val email: String = "",
     val password: String = "",
     val confirmPassword: String = "",

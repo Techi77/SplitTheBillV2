@@ -22,8 +22,7 @@ class RegistrationScreenViewModel @Inject constructor(
 
     private fun emailCheck() =
         with(state.value) {
-            email.isNotBlank() &&
-                    (isValidEmail || switcherState == Switcher.LOGIN)
+            email.isNotBlank() && isValidEmail
         }
 
     private fun passwordCheck() = state.value.password.isNotBlank() &&
@@ -121,10 +120,10 @@ class RegistrationScreenViewModel @Inject constructor(
             } catch (e: Exception) {
                 updateState {
                     copy(
-                        showProgress = false,
-                        error = e
+                        showProgress = false
                     )
                 }
+                pushEvent(RegistrationUiEvent.CatchError(e))
             }
         }
     }
@@ -147,10 +146,10 @@ class RegistrationScreenViewModel @Inject constructor(
             } else if (result.isFailure) {
                 updateState {
                     copy(
-                        showProgress = false,
-                        error = result.exceptionOrNull() as? Exception
+                        showProgress = false
                     )
                 }
+                pushEvent(RegistrationUiEvent.CatchError(Exception(result.exceptionOrNull()?.message)))
             }
         }
     }
