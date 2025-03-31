@@ -48,3 +48,4 @@ internal fun VersionCatalog.playServicesAuth() = findLibrary("play-services-auth
 //hilt
 internal fun VersionCatalog.hiltAndroid() = findLibrary("hilt-android").get()
 internal fun VersionCatalog.hiltAndroidCompiler() = findLibrary("hilt-android-compiler").get()
+internal fun VersionCatalog.hiltCompose() = findLibrary("hilt-compose").get()

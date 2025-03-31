@@ -1,29 +1,15 @@
 package com.stb.registration
 
-import android.app.Activity
-import androidx.core.content.ContextCompat
-import androidx.credentials.Credential
-import androidx.credentials.CredentialManager
-import androidx.credentials.CredentialManagerCallback
-import androidx.credentials.CustomCredential
-import androidx.credentials.GetCredentialRequest
-import androidx.credentials.GetCredentialResponse
-import androidx.credentials.exceptions.GetCredentialException
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption
-import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
-import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.auth
+import androidx.lifecycle.viewModelScope
 import com.stb.appbase.BaseViewModel
-import com.stb.registration.FirebaseConstants.WEB_CLIENT_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RegistrationScreenViewModel @Inject constructor() :
-    BaseViewModel<RegistrationUiState, RegistrationUiEvent>() {
+class RegistrationScreenViewModel @Inject constructor(
+    private val regAndAuthUseCase: RegistrationAndAuthorizationUseCase
+) : BaseViewModel<RegistrationUiState, RegistrationUiEvent>() {
     override fun createInitialState(): RegistrationUiState = RegistrationUiState()
 
     private fun checkButtonEnabled() {
@@ -96,137 +82,64 @@ class RegistrationScreenViewModel @Inject constructor() :
         checkButtonEnabled()
     }
 
-    private val auth: FirebaseAuth by lazy { Firebase.auth }
-
-    fun loginOrRegisterByEmailAndPassword(activity: Activity) {
+    fun loginOrRegisterByEmailAndPassword() {
         updateState {
             copy(
                 showProgress = true
             )
         }
-        if (state.value.switcherState == Switcher.REGISTRATION) {
-            registerByEmailAndPassword(activity)
-        } else loginByEmailAndPassword(activity)
-    }
-
-    // REGISTER BY EMAIL+PASSWORD
-
-    private fun registerByEmailAndPassword(activity: Activity) {
-        println("Techi: registerByEmailAndPassword")
-        auth.createUserWithEmailAndPassword(state.value.email, state.value.password)
-            .addOnCompleteListener(activity) { task ->
-                println("Techi: registerByEmailAndPassword addOnCompleteListener task=$task")
-                if (task.isSuccessful) {
-                    updateState {
-                        copy(
-                            user = auth.currentUser
-                        )
-                    }
-                } else {
-                    task.exception?.let { pushEvent(RegistrationUiEvent.CatchError(it)) }
-                }
+        val state = state.value
+        viewModelScope.launch {
+            try {
+                val result = if (state.switcherState == Switcher.REGISTRATION) {
+                    regAndAuthUseCase.registerByEmailAndPassword(
+                        email = state.email,
+                        password = state.password
+                    )
+                } else regAndAuthUseCase.loginByEmailAndPassword(
+                    email = state.email,
+                    password = state.password
+                )
                 updateState {
                     copy(
-                        showProgress = false
+                        showProgress = false,
+                        user = result.user
+                    )
+                }
+            } catch (e: Exception) {
+                updateState {
+                    copy(
+                        showProgress = false,
+                        error = e
                     )
                 }
             }
+        }
     }
 
-    // LOGIN BY EMAIL+PASSWORD
-
-    private fun loginByEmailAndPassword(activity: Activity) {
-        println("Techi: loginByEmailAndPassword")
-        auth.signInWithEmailAndPassword(state.value.email, state.value.password)
-            .addOnCompleteListener(activity) { task ->
-                println("Techi: loginByEmailAndPassword addOnCompleteListener task=$task")
-                if (task.isSuccessful) {
-                    println("Techi: loginByEmailAndPassword task is successful")
-                    updateState {
-                        copy(
-                            user = auth.currentUser
-                        )
-                    }
-                } else {
-                    task.exception?.let { pushEvent(RegistrationUiEvent.CatchError(it)) }
-                }
-                updateState {
-                    copy(
-                        showProgress = false
-                    )
-                }
-            }
-    }
-
-    // LOGIN BY GOOGLE
-
-    private val googleIdOption = GetGoogleIdOption.Builder()
-        .setServerClientId(WEB_CLIENT_ID)
-        .setFilterByAuthorizedAccounts(false)
-        .build()
-
-    private val request = GetCredentialRequest.Builder()
-        .addCredentialOption(googleIdOption)
-        .build()
-
-    private fun handleSignIn(credential: Credential, activity: Activity) {
+    fun signInWithGoogle() {
         updateState {
             copy(
                 showProgress = true
             )
         }
-        if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
-            val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
-            firebaseAuthWithGoogle(googleIdTokenCredential.idToken, activity = activity)
-            updateState {
-                copy(
-                    showProgress = false
-                )
+        viewModelScope.launch {
+            val result = regAndAuthUseCase.signInWithGoogle()
+            if (result.isSuccess) {
+                updateState {
+                    copy(
+                        showProgress = false,
+                        user = result.getOrNull()
+                    )
+                }
+            } else if (result.isFailure) {
+                updateState {
+                    copy(
+                        showProgress = false,
+                        error = result.exceptionOrNull() as? Exception
+                    )
+                }
             }
-        } else {
-            updateState {
-                copy(
-                    showProgress = false
-                )
-            }
-            pushEvent(RegistrationUiEvent.CatchError(Exception("Wrong credential")))
         }
-    }
-
-    private fun firebaseAuthWithGoogle(idToken: String, activity: Activity) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(activity) { task ->
-                if (task.isSuccessful) {
-                    updateState {
-                        copy(
-                            user = auth.currentUser
-                        )
-                    }
-                } else {
-                    task.exception?.let { pushEvent(RegistrationUiEvent.CatchError(it)) }
-                }
-            }
-    }
-
-    fun signInWithGoogle(activity: Activity) {
-        val credentialManager = CredentialManager.create(activity)
-        credentialManager.getCredentialAsync(
-            request = request,
-            context = activity,
-            cancellationSignal = null,
-            executor = ContextCompat.getMainExecutor(activity),
-            callback = object :
-                CredentialManagerCallback<GetCredentialResponse, GetCredentialException> {
-                override fun onResult(result: GetCredentialResponse) {
-                    val credential = result.credential
-                    handleSignIn(credential, activity)
-                }
-
-                override fun onError(e: GetCredentialException) {
-                    pushEvent(RegistrationUiEvent.CatchError(e))
-                }
-            }
-        )
     }
 }

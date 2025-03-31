@@ -25,4 +25,8 @@ internal fun Project.addUiHilt(
     commonExtension.apply {
         pluginManager.apply(GradleConstants.Plugins.HILT)
     }
+    val libs = libs()
+    dependencies{
+        add("implementation", libs.hiltCompose())
+    }
 }

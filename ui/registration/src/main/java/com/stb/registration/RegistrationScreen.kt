@@ -1,7 +1,6 @@
 package com.stb.registration
 
 import android.content.res.Configuration
-import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -36,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -43,8 +43,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.stb.appbase.CollectAsEventWithLifecycle
 import com.stb.components.RegistrationDialogButton
 import com.stb.components.StbTextField
@@ -59,16 +59,14 @@ import com.stb.components.R as MainR
 
 @Composable
 fun RegistrationScreen(
-    viewModel: RegistrationScreenViewModel = viewModel()
+    viewModel: RegistrationScreenViewModel = hiltViewModel()
 ) {
-    val activity = LocalActivity.current
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     viewModel.events.CollectAsEventWithLifecycle {
         when (it) {
-            is RegistrationUiEvent.CatchError -> it.error.message?.let { message ->
-                showToast(message)
-            }
+            is RegistrationUiEvent.CatchError ->
+                showToast(it.error.message ?: stringResource(MainR.string.standard_error))
         }
     }
 
@@ -85,15 +83,11 @@ fun RegistrationScreen(
                 actionHandler = remember {
                     { action ->
                         when (action) {
-                            RegistrationAction.LogInByGoogle -> {
-                                activity?.let {
-                                    viewModel.signInWithGoogle(it)
-                                }
-                            }
+                            RegistrationAction.LogInByGoogle ->
+                                viewModel.signInWithGoogle()
 
-                            is RegistrationAction.SwitcherSelect -> {
+                            is RegistrationAction.SwitcherSelect ->
                                 viewModel.setSwitcherState(action.index)
-                            }
 
                             is RegistrationAction.SetEmail ->
                                 viewModel.setEmail(action.email)
@@ -105,9 +99,7 @@ fun RegistrationScreen(
                                 viewModel.setPasswordConfirm(action.passwordConfirm)
 
                             RegistrationAction.GoButtonClick ->
-                                activity?.let {
-                                    viewModel.loginOrRegisterByEmailAndPassword(it)
-                                }
+                                viewModel.loginOrRegisterByEmailAndPassword()
                         }
                     }
                 },
@@ -294,11 +286,13 @@ private fun LazyListScope.dialogBody(
         key = "goButton",
         contentType = RegistrationContentType.GO_BUTTON
     ) {
+        val keyboardController = LocalSoftwareKeyboardController.current
         Button(
             modifier = Modifier
                 .animateItem()
                 .widthIn(min = 200.dp),
             onClick = {
+                keyboardController?.hide()
                 actionHandler(RegistrationAction.GoButtonClick)
             },
             colors = ButtonDefaults.buttonColors().copy(
