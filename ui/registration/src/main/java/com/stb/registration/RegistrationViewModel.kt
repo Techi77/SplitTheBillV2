@@ -1,14 +1,18 @@
 package com.stb.registration
 
+import android.app.Application
 import androidx.lifecycle.viewModelScope
 import com.stb.appbase.BaseViewModel
+import com.stb.preferences.DataStoreManager
+import com.stb.preferences.UserData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class RegistrationScreenViewModel @Inject constructor(
-    private val regAndAuthUseCase: RegistrationAndAuthorizationUseCase
+    private val regAndAuthUseCase: RegistrationAndAuthorizationUseCase,
+    application: Application
 ) : BaseViewModel<RegistrationUiState, RegistrationUiEvent>() {
     override fun createInitialState(): RegistrationUiState = RegistrationUiState()
 
@@ -93,6 +97,10 @@ class RegistrationScreenViewModel @Inject constructor(
         checkButtonEnabled()
     }
 
+    private val dataStoreManager: DataStoreManager by lazy {
+        DataStoreManager(application.applicationContext)
+    }
+
     fun loginOrRegisterByEmailAndPassword() {
         updateState {
             copy(
@@ -114,9 +122,17 @@ class RegistrationScreenViewModel @Inject constructor(
                 updateState {
                     copy(
                         showProgress = false,
-                        user = result.user
                     )
                 }
+                dataStoreManager.setAuthorizedUser(
+                    UserData(
+                        uid = result.user?.uid.orEmpty(),
+                        email = result.user?.email,
+                        displayName = result.user?.displayName.orEmpty(),
+                        isEmailVerified = result.user?.isEmailVerified ?: true,
+                    )
+                )
+                pushEvent(RegistrationUiEvent.GoToMainScreen)
             } catch (e: Exception) {
                 updateState {
                     copy(
@@ -140,9 +156,18 @@ class RegistrationScreenViewModel @Inject constructor(
                 updateState {
                     copy(
                         showProgress = false,
-                        user = result.getOrNull()
                     )
                 }
+                val user = result.getOrNull()
+                dataStoreManager.setAuthorizedUser(
+                    UserData(
+                        uid = user?.uid.orEmpty(),
+                        email = user?.email,
+                        displayName = user?.displayName.orEmpty(),
+                        isEmailVerified = user?.isEmailVerified ?: true,
+                    )
+                )
+                pushEvent(RegistrationUiEvent.GoToMainScreen)
             } else if (result.isFailure) {
                 updateState {
                     copy(

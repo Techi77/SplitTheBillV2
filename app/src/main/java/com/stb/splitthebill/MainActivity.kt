@@ -16,7 +16,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SplitTheBillTheme {
-                MyApp()
+                MyApp(applicationContext)
             }
         }
     }

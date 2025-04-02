@@ -59,4 +59,10 @@ gradlePlugin {
             implementationClass = "plugins.AppBasePlugin"
         }
     }
+    plugins {
+        register("dataPlugin") {
+            id = "stb.dataPlugin"
+            implementationClass = "plugins.DataPlugin"
+        }
+    }
 }

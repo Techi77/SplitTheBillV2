@@ -31,11 +31,13 @@
             <option value="$PROJECT_DIR$/core/feature/appBase" />
             <option value="$PROJECT_DIR$/core/feature/registration" />
             <option value="$PROJECT_DIR$/core/theme" />
+            <option value="$PROJECT_DIR$/data" />
+            <option value="$PROJECT_DIR$/data/preferences" />
             <option value="$PROJECT_DIR$/ui" />
+            <option value="$PROJECT_DIR$/ui/main" />
             <option value="$PROJECT_DIR$/ui/registration" />
           </set>
         </option>
-        <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
     </option>
   </component>

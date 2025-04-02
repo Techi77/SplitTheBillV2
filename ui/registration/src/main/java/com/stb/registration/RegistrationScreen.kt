@@ -59,6 +59,7 @@ import com.stb.components.R as MainR
 
 @Composable
 fun RegistrationScreen(
+    onRegistrationComplete: () -> Unit = {},
     viewModel: RegistrationScreenViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -73,6 +74,8 @@ fun RegistrationScreen(
                 }
                 showToast(errorMessage)
             }
+
+            RegistrationUiEvent.GoToMainScreen -> onRegistrationComplete()
         }
     }
 

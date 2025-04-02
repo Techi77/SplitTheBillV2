@@ -31,4 +31,5 @@ enum class Switcher(@StringRes val textRes: Int) {
 
 sealed interface RegistrationUiEvent : UiEvent {
     data class CatchError(val error: Exception) : RegistrationUiEvent
+    data object GoToMainScreen : RegistrationUiEvent
 }
