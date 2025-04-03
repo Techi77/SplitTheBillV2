@@ -21,4 +21,8 @@ class MainViewModel @Inject constructor(
     fun logout() {
         viewModelScope.launch { dataStoreManager.clearUser() }
     }
+
+    fun goToEditOrCreationList(listId: String){
+        //TODO
+    }
 }
