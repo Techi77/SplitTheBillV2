@@ -16,7 +16,6 @@ import org.gradle.kotlin.dsl.dependencies
 class FirebasePlugin : Plugin<Project> {
     override fun apply(project: Project) {
         with(project) {
-            plugins.apply(GradleConstants.Plugins.GOOGLE_SERVICES)
             val libs = libs()
             dependencies {
                 add("implementation", platform(libs.firebaseBom()))

@@ -19,7 +19,6 @@ class UiPlugin : Plugin<Project> {
             with(plugins) {
                 apply(GradleConstants.Plugins.ANDROID_LIBRARY)
                 apply(GradleConstants.Plugins.KOTLIN_ANDROID)
-                apply(GradleConstants.Plugins.GOOGLE_SERVICES)
             }
 
             extensions.configure<LibraryExtension> {
