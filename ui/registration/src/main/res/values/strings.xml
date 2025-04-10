@@ -12,4 +12,5 @@
     <string name="password_requirements">, и всё будет круто!</string>
     <string name="email_is_not_valid">с email что-то не так</string>
     <string name="no_user">Кто же ты? Такого email нет в нашем списке</string>
+    <string name="email_already_exists">Ты уже есть в списке наших пользователей😉</string>
 </resources>

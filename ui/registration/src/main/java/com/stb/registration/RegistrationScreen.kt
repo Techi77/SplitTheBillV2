@@ -49,6 +49,8 @@ import com.stb.appbase.CollectAsEventWithLifecycle
 import com.stb.components.RegistrationDialogButton
 import com.stb.components.StbTextField
 import com.stb.components.SwitcherWithText
+import com.stb.registration.RegistrationErrors.EMAIL_ALREADY_EXISTS
+import com.stb.registration.RegistrationErrors.NO_SUCH_EMAIL_ERROR
 import com.stb.theme.ui.Border
 import com.stb.theme.ui.BorderDark
 import com.stb.theme.ui.Green
@@ -70,8 +72,10 @@ fun RegistrationScreen(
                 val errorMessage = when {
                     it.error.message.isNullOrBlank() -> stringResource(MainR.string.standard_error)
                     it.error.message!!.startsWith(NO_SUCH_EMAIL_ERROR) -> stringResource(R.string.no_user)
+                    it.error.message!!.startsWith(EMAIL_ALREADY_EXISTS) -> stringResource(R.string.email_already_exists)
                     else -> it.error.message!!
                 }
+                println("Techi: errorMessage=$errorMessage")
                 showToast(errorMessage)
             }
 
@@ -402,4 +406,3 @@ private fun RegistrationCardDarkThemePreview() {
     )
 }
 
-private const val NO_SUCH_EMAIL_ERROR = "There is no user record corresponding to this identifier."
