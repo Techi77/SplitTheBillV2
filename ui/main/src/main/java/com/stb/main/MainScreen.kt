@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.stb.appbase.CollectAsEventWithLifecycle
 import com.stb.components.RegistrationDialogButton
 import com.stb.theme.ui.Border
 import com.stb.theme.ui.BorderDark
@@ -57,9 +58,17 @@ import com.stb.theme.R as ThemeR
 
 @Composable
 fun MainScreen(
+    navigateToListDetail: (String) -> Unit,
     viewModel: MainViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    viewModel.events.CollectAsEventWithLifecycle {
+        when (it) {
+            is MainUiEvent.NavigateToEditList -> {
+                navigateToListDetail(it.listId)
+            }
+        }
+    }
     MainScreenScaffold(
         state = state,
         actionHandler = remember {

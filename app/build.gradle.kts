@@ -9,6 +9,7 @@ android {
 dependencies {
     implementation(project(":ui:registration"))
     implementation(project(":ui:main"))
+    implementation(project(":ui:editlist"))
     implementation(project(":core:theme"))
     implementation(project(":data:preferences"))
 }

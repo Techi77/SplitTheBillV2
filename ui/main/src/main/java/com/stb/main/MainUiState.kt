@@ -1,5 +1,6 @@
 package com.stb.main
 
+import com.stb.appbase.UiEvent
 import com.stb.appbase.UiState
 
 data class  MainUiState (
@@ -12,4 +13,7 @@ data class  MainUiState (
         val date: String,
         val iconId: Int
     )
+}
+sealed interface MainUiEvent : UiEvent {
+    data class NavigateToEditList(val listId: String) : MainUiEvent
 }

@@ -11,8 +11,12 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     application: Application
-) : BaseViewModel<MainUiState, Nothing>() {
+) : BaseViewModel<MainUiState, MainUiEvent>() {
     override fun createInitialState() = MainUiState()
+
+    companion object {
+        const val LIST_ID = "list_it"
+    }
 
     private val dataStoreManager: DataStoreManager by lazy {
         DataStoreManager(application.applicationContext)
@@ -23,6 +27,6 @@ class MainViewModel @Inject constructor(
     }
 
     fun goToEditOrCreationList(listId: String){
-        //TODO
+        pushEvent(MainUiEvent.NavigateToEditList(listId))
     }
 }
