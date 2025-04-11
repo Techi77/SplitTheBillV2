@@ -2,16 +2,13 @@ package com.stb.main
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -36,8 +33,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,14 +41,11 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.stb.appbase.CollectAsEventWithLifecycle
-import com.stb.components.RegistrationDialogButton
-import com.stb.theme.ui.Border
-import com.stb.theme.ui.BorderDark
+import com.stb.components.BasicDialogCard
 import com.stb.theme.ui.MainBlue
 import com.stb.theme.ui.SplitTheBillTheme
 import com.stb.theme.ui.getColorTheme
 import com.stb.ui.main.R
-import com.stb.components.R as MainR
 import com.stb.theme.R as ThemeR
 
 @Composable
@@ -139,13 +131,15 @@ private fun MainScreenScaffold(
         if (state.list.isEmpty())
             Box(
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .padding(paddingValues),
                 contentAlignment = Alignment.Center
             ) {
-                EmptyMainScreenBody(
-                    modifier = Modifier
-                        .padding(paddingValues),
-                    onGoButtonClick = {
+                BasicDialogCard(
+                    title = stringResource(R.string.create),
+                    subtitle = stringResource(R.string.your_first_list),
+                    buttonText = stringResource(R.string.go),
+                    onButtonClick = {
                         actionHandler.invoke(MainScreenAction.CreateOrEditList(""))
                     }
                 )
@@ -158,52 +152,6 @@ private fun MainScreenScaffold(
                     actionHandler.invoke(MainScreenAction.CreateOrEditList(it))
                 }
             )
-    }
-}
-
-@Composable
-private fun EmptyMainScreenBody(
-    modifier: Modifier = Modifier,
-    onGoButtonClick: () -> Unit = {},
-) {
-    val shape = RoundedCornerShape(28.dp)
-    Column(
-        modifier = modifier
-            .padding(24.dp)
-            .fillMaxWidth()
-            .background(
-                getColorTheme().primaryContainer,
-                shape
-            )
-            .border(
-                width = 1.dp,
-                color = if (isSystemInDarkTheme()) BorderDark else Border,
-                shape = shape
-            )
-            .padding(top = 24.dp, start = 24.dp, end = 24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
-        Image(
-            bitmap = ImageBitmap.imageResource(MainR.drawable.ic_pizza),
-            contentDescription = "",
-            modifier = Modifier
-                .size(24.dp)
-        )
-        Text(
-            text = stringResource(R.string.create),
-            color = getColorTheme().onPrimaryContainer,
-            fontSize = 24.sp
-        )
-        Text(
-            text = stringResource(R.string.your_first_list),
-            color = getColorTheme().onPrimaryContainer,
-            fontSize = 14.sp
-        )
-        RegistrationDialogButton(
-            text = stringResource(R.string.go),
-            onClick = onGoButtonClick
-        )
     }
 }
 
