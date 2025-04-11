@@ -52,7 +52,10 @@ fun MyApp(applicationContext: Context) {
             arguments = listOf(navArgument(LIST_ID) { type = NavType.StringType })
         ) { backStackEntry ->
             val listId = backStackEntry.arguments?.getString(LIST_ID) ?: ""
-            ListMainScreen(listId)
+            ListMainScreen(
+                listId = listId,
+                goBack = {navController.popBackStack()}
+            )
         }
     }
 }

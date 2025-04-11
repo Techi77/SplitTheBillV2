@@ -1,0 +1,14 @@
+<resources>
+    <string name="invite">Пригласим?</string>
+    <string name="more_people">больше людей</string>
+    <string name="add">Добавим?</string>
+    <string name="things_you_bought">вещи, которые ты купил</string>
+    <string name="go">Давай!</string>
+    <string name="members">Люди</string>
+    <string name="more_about">Больше о делёжке</string>
+    <string name="archive_list">Архивировать список</string>
+    <string name="ready">Готово</string>
+    <string name="name">Название</string>
+    <string name="price">Цена (за шт или кг)</string>
+    <string name="quantity">Количество (или вес)</string>
+</resources>
