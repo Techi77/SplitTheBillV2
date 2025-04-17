@@ -1,16 +1,22 @@
 package com.stb.editlist
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.DropdownMenu
@@ -35,6 +41,7 @@ import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.stb.components.BasicDialogCard
@@ -139,6 +146,18 @@ private fun ListMainScreenScaffold(
                 modifier = Modifier.padding(paddingValues),
                 actionHandler = actionHandler
             )
+        else {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(paddingValues),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(items = state.list, key = {it.id}) {
+                    ItemFromList(it)
+                }
+            }
+        }
     }
 }
 
@@ -198,6 +217,36 @@ private fun EmptyListBody(
     }
 }
 
+@Composable
+private fun ItemFromList(item: ListItem) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(getColorTheme().outline)
+            .padding(1.dp)
+            .background(getColorTheme().primaryContainer)
+            .padding(15.dp),
+        horizontalArrangement = Arrangement.spacedBy(20.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.Outlined.ShoppingCart,
+            contentDescription = null,
+            modifier = Modifier.size(50.dp),
+            tint = getColorTheme().secondary.copy(alpha = 0.5f)
+        )
+        Text(
+            text = item.title,
+            modifier = Modifier.weight(1f),
+            fontSize = 15.sp
+        )
+        Text(
+            text = (item.pricePerUnit * item.quantityOrWeight).toString(),
+            fontSize = 18.sp
+        )
+    }
+}
+
 @Immutable
 private sealed interface ListScreenAction {
     data class AddNewItem(val newItem: ListItem) : ListScreenAction
@@ -208,18 +257,57 @@ private sealed interface ListScreenAction {
 
 @Composable
 @Preview
-private fun EmptyListBodyPreview() {
+private fun ListItemPreview() {
     SplitTheBillTheme {
-        ListMainScreenScaffold(
-            state = ListMainUiState()
-        )
+        Column(
+            modifier = Modifier
+                .background(getColorTheme().primaryContainer)
+        ) {
+            ItemFromList(
+                ListItem(
+                    title = "Title",
+                    quantityOrWeight = 1.0,
+                    pricePerUnit = 1000.00
+                )
+            )
+        }
     }
 }
 
 @Composable
 @Preview
-private fun MoreMenuPreview() {
+private fun FilledListBodyPreview() {
     SplitTheBillTheme {
-        MoreMenu()
+        ListMainScreenScaffold(
+            state = ListMainUiState(
+                list = listOf(ListItem(
+                    id = 0,
+                    title = "Title",
+                    quantityOrWeight = 1.0,
+                    pricePerUnit = 1000.00
+                ),
+                    ListItem(
+                        id = 2,
+                        title = "Title",
+                        quantityOrWeight = 1.0,
+                        pricePerUnit = 1000.00
+                    ),
+                    ListItem(
+                        id = 3,
+                        title = "Title",
+                        quantityOrWeight = 1.0,
+                        pricePerUnit = 1000.00
+                    ))
+            )
+        )
+    }
+}
+@Composable
+@Preview
+private fun EmptyListBodyPreview() {
+    SplitTheBillTheme {
+        ListMainScreenScaffold(
+            state = ListMainUiState()
+        )
     }
 }
