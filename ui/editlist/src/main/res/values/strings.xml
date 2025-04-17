@@ -11,4 +11,6 @@
     <string name="name">Название</string>
     <string name="price">Цена (за шт или кг)</string>
     <string name="quantity">Количество (или вес)</string>
+    <string name="add_quantity">Добавить количество</string>
+    <string name="total">Итого</string>
 </resources>

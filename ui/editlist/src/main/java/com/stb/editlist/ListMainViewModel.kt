@@ -1,6 +1,7 @@
 package com.stb.editlist
 
 import com.stb.appbase.BaseViewModel
+import com.stb.editlist.entity.ListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -15,27 +16,19 @@ class ListMainViewModel @Inject constructor() : BaseViewModel<ListMainUiState, N
             )
         }
 
-    fun setNewItem(
-        newItem: ListMainUiState.ListItem? = null
+    fun addNewItemToList(
+        newItem: ListItem
     ) {
         updateState {
             copy(
-                newItem = newItem
+                list = list + newItem
             )
         }
     }
-    fun saveNewItem() {
-        state.value.newItem?.let {
-            updateState {
-                copy(
-                    list = list + it,
-                    newItem = null
-                )
-            }
-        } ?: updateState {
-            copy(
-                showNewItemError = true
-            )
-        }
+
+    fun showHideAddNewItemDialog(show: Boolean) = updateState {
+        copy(
+            showAddNewItemDialog = show
+        )
     }
 }
